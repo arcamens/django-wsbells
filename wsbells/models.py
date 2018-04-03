@@ -45,7 +45,6 @@ class UserWS(QueueWS):
         # Make the command in a way that the sender is the second
         # parameter. It should be ajson-like structure though.
         data = '%s %s %s' % (cmd, self.qname(), ' '.join(args))
-        print('the kwarogs', kwargs)
         ws.publish(target.qname(), data, **kwargs)
 
     def connected_queues(self):
