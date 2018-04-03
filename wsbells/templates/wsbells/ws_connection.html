@@ -1,0 +1,88 @@
+<script>
+
+var wsbroker = '{{WS_HOST}}';  // mqtt websocket enabled broker
+var wsport = {{WS_PORT}}; // port for above
+var client = new Paho.MQTT.Client(wsbroker, wsport, "/ws", "myclientid_" + parseInt(Math.random() * 100), 10);
+
+function onConnect() {
+     var qnames = {{qnames|safe}};
+
+     qnames.forEach(function(ind){
+         client.subscribe(ind);
+
+     });
+
+    // Tell the user to subscribe to the default organization.
+    client.subscribe('organization{{organization.id}}');    
+
+    // Users will have a particular queue
+    // for getting specific events.
+    client.subscribe("user{{user.id}}");
+
+    // message = new Paho.MQTT.Message("Connected from browser!");
+    // message.destinationName = "beta";
+    // client.send(message);
+
+  console.log("onConnect");
+
+}
+
+function onConnectionLost(responseObject) {
+    if (responseObject.errorCode !== 0) {
+        console.log("onConnectionLost:"+responseObject.errorMessage);
+    }
+    start();
+
+}
+
+function onMessageArrived(message) {
+    // get the queue here and parse the message
+    // if it is user queue and the message is unsubscribe
+    // then the user gets unsubscribed from the queue.
+    console.log("onMessageArrived:"+ message.payloadString +
+    "destionationName:" + message.destinationName);
+
+    args = message.payloadString.split(' ')
+    console.log(args);
+
+    // Uses jquery trigger to dispatch the events.
+    $(document).trigger(args[0], args.slice(1));
+}
+
+// set callback handlers
+// connect the client
+
+function start() {
+    client.onConnectionLost = onConnectionLost;
+    client.onMessageArrived = onMessageArrived;
+
+    var options = {
+    onSuccess        :onConnect, 
+    keepAliveInterval: 60 * 60,
+    timeout          : 15000,
+    'useSSL'         : {{WS_USE_SSL}}, 
+    mqttVersion      : 3.0};
+
+    client.connect(options);
+}
+
+$(document).on('ws-unsubscribe', function(e, sender, queue) {
+    client.unsubscribe(queue);
+});
+
+$(document).on('ws-subscribe', function(e, sender, queue) {
+    console.log('The queue', sender);
+    client.subscribe(queue);
+});
+
+$(document).on('ws-restart', function(e, sender, queue) {
+    location.reload();
+});
+
+start()
+</script>
+
+
+
+
+
