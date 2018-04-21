@@ -61,10 +61,11 @@ class UserWS(QueueWS):
         qnames.append(self.qname())
 
         context = {'WS_HOST': settings.WS_HOST, 'WS_PORT':settings.WS_PORT, 
-        'client_id': self.id, 'WS_USE_SSL': settings.WS_USE_SSL,
+        'client_id': self.id, 'WS_USE_SSL': settings.WS_USE_SSL, 'me': self,
          'qnames': json.dumps(qnames)}
 
         tmp  = get_template('wsbells/ws_connection.html')
         html = tmp.render(context)
         return html
+
 

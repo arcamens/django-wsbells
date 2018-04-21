@@ -12,13 +12,6 @@ function onConnect() {
 
      });
 
-    // Tell the user to subscribe to the default organization.
-    client.subscribe('organization{{organization.id}}');    
-
-    // Users will have a particular queue
-    // for getting specific events.
-    client.subscribe("user{{user.id}}");
-
     // message = new Paho.MQTT.Message("Connected from browser!");
     // message.destinationName = "beta";
     // client.send(message);
@@ -46,7 +39,11 @@ function onMessageArrived(message) {
     console.log(args);
 
     // Uses jquery trigger to dispatch the events.
-    $(document).trigger(args[0], args.slice(1));
+    if(args[1] == "{{me.qname}}") {
+        $(document).trigger('*' + args[0], args.slice(1));
+    } else {
+        $(document).trigger(args[0], args.slice(1));
+    }
 }
 
 // set callback handlers
@@ -81,8 +78,5 @@ $(document).on('ws-restart', function(e, sender, queue) {
 
 start()
 </script>
-
-
-
 
 
