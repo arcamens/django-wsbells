@@ -63,13 +63,12 @@ function start() {
     client.connect(options);
 }
 
-$(document).on('ws-unsubscribe', function(e, sender, queue) {
+$(document).on('ws-unsubscribe *ws-unsubscribe', function(e, sender, queue) {
     client.unsubscribe(queue);
 });
 
-$(document).on('ws-subscribe', function(e, sender, queue) {
-    console.log('The queue', sender);
-    client.subscribe(queue);
+$(document).on('ws-subscribe *ws-subscribe', function(e, sender, queue) {
+   client.subscribe(queue);
 });
 
 $(document).on('ws-restart', function(e, sender, queue) {
@@ -78,5 +77,6 @@ $(document).on('ws-restart', function(e, sender, queue) {
 
 start()
 </script>
+
 
 
