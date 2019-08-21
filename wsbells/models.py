@@ -6,7 +6,10 @@ import json
 
 # Create your models here.
 
-class QueueWS:
+class QueueWS(models.Model):
+    class Meta:
+        abstract = True
+
     def qname(self):
         name = '%s%s' % (self.__class__.__name__, self.id)
         return name
@@ -67,5 +70,6 @@ class UserWS(QueueWS):
         tmp  = get_template('wsbells/ws_connection.html')
         html = tmp.render(context)
         return html
+
 
 
