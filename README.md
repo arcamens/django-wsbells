@@ -7,6 +7,18 @@ The django-wsbells tool uses rabbitmq broker to delegate messages to the users.
 
 # Install
 
+# Demo
+
+The django-wsbells package comes with a demo whose intent is clarify the workings of it. The demo is a basic chat application that
+comes with a basic user sign up and login system. 
+
+# RabbitMQ
+
+It is necessary to get RabbitMQ running first. Once RabbitMQ is installed just follow the steps below:
+
+~~~
+~~~
+
 # Introduction
 
 
@@ -17,3 +29,6 @@ a Web Socket connection.
 ~~~html
 {{user.ws_connection | safe}}
 ~~~
+
+It is necessary to have in mind that wsbells demand you to include JQuery in your front end. The events sent by the server
+are trigged using JQuery.

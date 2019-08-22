@@ -2,4 +2,6 @@ include *.md
 include vy.png
 include *.jpg
 include requirements.txt
+include wschat/
+include core_app/
 
